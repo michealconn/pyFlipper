@@ -9,8 +9,10 @@ class Ikey(Threaded):
     
     def _validations(self, key_type, key_data):
         key_types = list(self.KEY_TYPES_TO_KEY_DATA_LENGHT.keys())
-        assert key_type in key_types, f"key_type must be in {key_types}"
-        assert is_hexstring(key_data), "key_data must be hexstring"
+        if key_type not in key_types:
+            raise AssertionError(f"key_type must be in {key_types}")
+        if not is_hexstring(key_data):
+            raise AssertionError("key_data must be hexstring")
         assert len(key_data.replace(' ', '')) == self.KEY_TYPES_TO_KEY_DATA_LENGHT[key_type]
         
     def read(self, timeout: int = 5) -> str:

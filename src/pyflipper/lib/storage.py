@@ -33,7 +33,8 @@ class Storage:
         self.write = __class__.Write(serial_wrapper=serial_wrapper)
 
     def info(self, fs: str) -> dict:
-        assert fs in ('/ext', '/int'), "Storage filesystem must be '/ext' or '/int'"
+        if fs not in ('/ext', '/int'):
+            raise AssertionError("Storage filesystem must be '/ext' or '/int'")
         info_p = re.compile("(\w+):\s(.+)")
         response = self._serial_wrapper.send(f"storage info {fs}")
         info = info_p.findall(response)

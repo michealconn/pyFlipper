@@ -27,8 +27,8 @@ from .lib.update import Update
 class PyFlipper:
 
     def __init__(self, **kwargs) -> None:
-        assert sum(bool(kwargs.get(k)) for k in ('com', 'ws', 'tcp')) == 1, \
-            'Only one of com, ws, tcp should be specified'
+        if sum(bool(kwargs.get(k)) for k in ('com', 'ws', 'tcp')) != 1:
+            raise AssertionError('Only one of com, ws, tcp should be specified')
         if kwargs.get('com'):
             self._serial_wrapper = LocalSerial(com=kwargs['com'])
         elif kwargs.get('ws'):
