@@ -7,7 +7,8 @@ class Threaded:
         self.thread = None
 
     def exec(self, func, timeout: int):
-        assert bool(func) or bool(timeout), "func or timeout required"
+        if not (bool(func) or bool(timeout)):
+            raise AssertionError("func or timeout required")
         def _timer():
             time.sleep(timeout)
             self.stop()

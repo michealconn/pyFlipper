@@ -9,8 +9,10 @@ class Subghz(Threaded):
         return self._serial_wrapper.send(f"subghz tx {hex_key} {frequency} {te} {count}")
 
     def tx_from_file(self, file_name: str, repeat: int = 1, device: int = 0):
-        assert repeat > 0
-        assert device in (0, 1)  # 0 => CC1101_INT, 1 => CC1101_EXT
+        if repeat <= 0:
+            raise AssertionError
+        if device not in (0, 1):
+            raise AssertionError
         return self._serial_wrapper.send(f"subghz tx_from_file {file_name} {repeat} {device}")
 
     def rx(self, frequency: int = 433920000, raw: bool = False, timeout: int = 5):
@@ -25,6 +27,7 @@ class Subghz(Threaded):
 
     def decode_raw(self, sub_file: str) -> str:
         # TODO: implement regex catch errors
-        assert sub_file.endswith('.sub')
+        if not sub_file.endswith('.sub'):
+            raise AssertionError
         return self._serial_wrapper.send(f"subghz decode_raw {sub_file}")
     

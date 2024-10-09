@@ -17,7 +17,8 @@ class RFID(Threaded):
     # key_data is just the data you can also read from the lf rfid tags in hex eg '5500824806' from EM4100 type
 
     def emulate(self, key_type, key_data, timeout: int = 5) -> str:
-        assert key_type in self.KEY_TYPES, f"key_type not in {str(self.KEY_TYPES)}"
+        if key_type not in self.KEY_TYPES:
+            raise AssertionError(f"key_type not in {str(self.KEY_TYPES)}")
         def _run():
             data = self._serial_wrapper.send("rfid emulate " + key_type + " " + key_data)
             
@@ -27,7 +28,8 @@ class RFID(Threaded):
 
 
     def write(self, key_type, key_data, timeout: int = 5) -> str:
-        assert key_type in self.KEY_TYPES, f"key_type not in {str(self.KEY_TYPES)}"
+        if key_type not in self.KEY_TYPES:
+            raise AssertionError(f"key_type not in {str(self.KEY_TYPES)}")
         def _run():
             data = self._serial_wrapper.send("rfid write " + key_type + " " + key_data)
             

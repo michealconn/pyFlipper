@@ -12,8 +12,10 @@ class Input(Threaded):
         return self._serial_wrapper.send("input dump")
     
     def send(self, key: str, type: str) -> None:
-        assert key in self.KEYS, f"key must be in {self.KEYS}"
-        assert type in self.TYPES, f"type must be in {self.TYPES}"
+        if key not in self.KEYS:
+            raise AssertionError(f"key must be in {self.KEYS}")
+        if type not in self.TYPES:
+            raise AssertionError(f"type must be in {self.TYPES}")
         #FIXME:
         self._serial_wrapper.send(f"input send {key} {type}")
     
